@@ -1,0 +1,38 @@
+[
+  {
+    "content": "Fase 1: Tutup gate merah INV-GATE-01 di akarnya + bukti (POC 26/26)",
+    "status": "completed"
+  },
+  {
+    "content": "Fase 2 (F-6): Investigasi bukti → keputusan CABUT mesin persetujuan generik",
+    "status": "completed"
+  },
+  {
+    "content": "Fase 2 (F-6): Backend — cabut mesin generik + daftarkan 14 antrean nyata (KPI 17→22)",
+    "status": "completed"
+  },
+  {
+    "content": "Fase 2 (F-6): Gate baru INV-APPR-01 (self-test 15/15) + perbaikan invarian koleksi",
+    "status": "completed"
+  },
+  {
+    "content": "Fase 2 (F-6): POC F-6 bukti-merah 43/43 + registrasi di gate.sh",
+    "status": "completed"
+  },
+  {
+    "content": "Fase 2 (F-6): Frontend — panel antrean lain + perbaikan 4×403 senyap manager (kini 0)",
+    "status": "completed"
+  },
+  {
+    "content": "Fase 2 (F-6): gate.sh --full HIJAU 69 PASS / 0 FAIL (receipt final)",
+    "status": "completed"
+  },
+  {
+    "content": "Fase 2 (F-6): E2E testing_agent_v3 — BE 47/47, FE 21/22 (timeout skrip; diverifikasi tangan admin+manajer)",
+    "status": "completed"
+  },
+  {
+    "content": "Dokumentasi: plan.md §STATUS F-6, SESSION_HANDOFF.md, ENTITY_REGISTRY.md (pensiun + aturan tetap hidup)",
+    "status": "completed"
+  }
+]
