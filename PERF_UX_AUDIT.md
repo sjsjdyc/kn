@@ -122,6 +122,29 @@ default page_size **20**; urutan modul terpanas bertahap; alur create kompleks t
 - Hasil: **main.js 3.0MB → 892KB (-70%)**, 85 chunk on-demand. Uji nav PO/GL/WMS/Sales/HR:
   nol console/page/chunk error.
 
-### ⏳ P4 — Create jadi modal (BELUM): ~15 view form inline → FormModal; alur kompleks tetap halaman.
+### ✅ P4 — Create jadi modal (**SELESAI 2026-08-17**, terverifikasi agen uji 10/10 user story)
+- **Standarnya**: `frontend/src/components/FormModal.jsx` — kepala menempel (judul+subjudul+tutup),
+  badan bisa di-scroll, kaki menempel (Batal/Simpan), **Esc menutup**, scroll halaman di belakang
+  dikunci, fokus otomatis ke isian pertama, **galat tampil DI DALAM modal** (bukan `alert`), dan
+  backdrop memakai `overlayDismiss()` → **INV-UI-01 tetap hijau** (memilih opsi dropdown ber-portal
+  Radix TIDAK menutup modal; diuji langsung di layar Transfer Gudang).
+  Bila isinya sudah komponen ber-`<form>` sendiri, `FormModal` **tidak** membungkusnya lagi
+  (anti "form di dalam form" → agen uji: nol `validateDOMNesting`).
+- **10 layar dikonversi** (logika form tidak diubah, hanya wadahnya): Supplier · Daftar Harga
+  Supplier · Kebijakan Retur · Unit Organisasi (HRD) · Kas · Retur Beli · **Retur Jual** (dulu
+  MENUKAR seluruh halaman) · Aturan Persetujuan · Transfer Gudang · Master Data (AdminView).
+- **Terukur** (`scripts/audit_create_modal.py`): create **inline 12 → 0** · modal **36 → 44** ·
+  navigate **7** (tetap halaman, keputusan pemilik) · **tombol mati 0**.
+- Ikut dibereskan: label tombol yang berbunyi *"Tutup Form"* (tak masuk akal untuk pop-up) di
+  Retur Beli & Kas; `AdminView` kini tombolnya **selalu terlihat** (dulu hilang saat form terbuka)
+  dan daftar Records tidak lagi terhimpit kolom 360px.
+- **Gate baru `INV-UI-05`** (`scripts/audit_create_modal.py`, + `--self-test` 7 kasus bukti-merah)
+  terdaftar di `gate.sh`: create **inline baru** / **pindah halaman tanpa keputusan tercatat** /
+  **tombol mati** = MERAH; pengecualian wajib ber-ALASAN tertulis. Penjaga ini juga diperbaiki dua
+  kali saat dibuat karena sempat **menuduh palsu** (7 layar yang sudah benar terbaca "inline" hanya
+  karena nama komponen pop-up ditulis sebelum `open={state}`; `setForm({…})` disalahartikan sebagai
+  "membuka pintu") — penjaga yang menuduh palsu akan dimatikan orang.
+- Bukti: `gate.sh --full` **71 gate HIJAU / 0 FAIL** · `ux_audit` tidak bertambah buruk
+  (22 ERROR / 17 berkas, sama seperti sebelum P4 — itu backlog P5) · konsol browser **0 error**.
 ### ⏳ P5 — UI/UX rules (BELUM): loading/empty state file backlog (9 ERROR ux_audit), ganti
        `window.alert` (40×) & `window.confirm` (~20×) dgn toast/ConfirmModal.

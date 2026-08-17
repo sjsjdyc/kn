@@ -5,7 +5,11 @@ import { AlertCircle, ArrowLeft, CalendarClock, Loader2, Plus, RotateCcw, Shield
 import KNSelect from "../../components/KNSelect";
 
 
-export default function CreateReturnForm({ orders, token, onCreated, onCancel, onLoadOrders }) {
+export default function CreateReturnForm({ orders, token, onCreated, onCancel,
+                                           onLoadOrders, variant = "page" }) {
+  // FASE P4 — `variant="modal"`: lepas chrome halaman (tombol kembali + judul besar)
+  // karena FormModal sudah menyediakannya; tanpa ini pengguna melihat DUA judul.
+  const isModal = variant === "modal";
   const [orderId, setOrderId]       = useState("");
   const [returnType, setReturnType] = useState("retur");
   const [items, setItems]           = useState([{ product_id: "", product_name: "", quantity_returned: "", unit: "meter", reason: "", condition: "ok" }]);
@@ -76,15 +80,19 @@ export default function CreateReturnForm({ orders, token, onCreated, onCancel, o
   }
 
   return (
-    <div data-testid="create-return-form" className="view-container">
-      <button className="back-button" onClick={onCancel}><ArrowLeft size={14} /> Batal</button>
+    <div data-testid="create-return-form" className={isModal ? "" : "view-container"}>
+      {!isModal && (
+        <button className="back-button" onClick={onCancel}><ArrowLeft size={14} /> Batal</button>
+      )}
 
-      <div className="view-header">
-        <div>
-          <h1 className="view-title">Buat Return Baru</h1>
-          <p className="view-subtitle">Retur barang, Barang Sisa (BS), penggantian, komplain & garansi (purna jual) dari pelanggan</p>
+      {!isModal && (
+        <div className="view-header">
+          <div>
+            <h1 className="view-title">Buat Return Baru</h1>
+            <p className="view-subtitle">Retur barang, Barang Sisa (BS), penggantian, komplain & garansi (purna jual) dari pelanggan</p>
+          </div>
         </div>
-      </div>
+      )}
 
       {error && (
         <div className="notice-bar danger">
@@ -93,7 +101,7 @@ export default function CreateReturnForm({ orders, token, onCreated, onCancel, o
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="form-card">
+      <form onSubmit={handleSubmit} className={isModal ? "" : "form-card"}>
         <div className="form-row-2col">
           <div className="form-group">
             <label className="form-label" htmlFor="ret-order">Pesanan (SO) <span className="req">*</span></label>

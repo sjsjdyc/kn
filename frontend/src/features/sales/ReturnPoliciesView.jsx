@@ -8,6 +8,7 @@ import axios, { API } from "../../services/apiClient";
 import { ScrollText, Plus, X, Pencil, Power, ShieldCheck } from "lucide-react";
 import KNSelect from "../../components/KNSelect";
 import ErrorNotice from "../../components/ErrorNotice";
+import FormModal from "../../components/FormModal";
 import ConfirmModal from "../../components/ConfirmModal";
 
 const RETURN_TYPES = [
@@ -144,13 +145,23 @@ export default function ReturnPoliciesView({ currentUser }) {
       )}
       <ErrorNotice message={error} onRetry={load} onDismiss={() => setError("")} testId="policy-error" />
 
-      {showForm && canManage && (
-        <div data-testid="policy-form" className="section-card mb-3">
-          <div className="section-head">
-            <h2 className="text-[13px] font-bold">{editId ? "Edit Kebijakan" : "Buat Kebijakan Retur"}</h2>
-            <button className="icon-button" onClick={() => { setShowForm(false); setEditId(null); }}><X size={14} /></button>
-          </div>
-          <div className="section-body space-y-3">
+      {/* FASE P4 — form kebijakan retur menjadi POP-UP (dulu form panjang ini menyelip
+          di atas daftar kebijakan). Logika form tidak diubah. */}
+      <FormModal
+        open={showForm && canManage}
+        onClose={() => { setShowForm(false); setEditId(null); }}
+        title={editId ? "Ubah Kebijakan Retur" : "Kebijakan Retur Baru"}
+        subtitle="Jendela retur, biaya restocking, jenis & outcome yang diizinkan"
+        icon={ShieldCheck}
+        size="lg"
+        testId="policy-form"
+        onSubmit={submit}
+        submitLabel={editId ? "Simpan Perubahan" : "Buat Kebijakan"}
+        submitTestId="submit-policy-button"
+        cancelTestId="cancel-policy-button"
+        error={error}
+      >
+        <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <Field label="Nama Kebijakan" req>
                 <input data-testid="policy-name-input" value={form.name} className="field"
@@ -230,16 +241,8 @@ export default function ReturnPoliciesView({ currentUser }) {
               <textarea data-testid="policy-notes-input" className="field" rows="2" value={form.notes}
                 onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Catatan kebijakan..." />
             </Field>
-
-            <div className="flex gap-2">
-              <button data-testid="submit-policy-button" onClick={submit} className="flex-1 primary-button justify-center">
-                {editId ? "Simpan Perubahan" : "Buat Kebijakan"}
-              </button>
-              <button data-testid="cancel-policy-button" onClick={() => { setShowForm(false); setEditId(null); }} className="secondary-button">Batal</button>
-            </div>
-          </div>
         </div>
-      )}
+      </FormModal>
 
       <div className="section-card">
         <div className="grid grid-cols-[1.4fr_100px_100px_1fr_90px] px-3 py-1.5 bg-[#FAFBFC] text-[10px] font-bold uppercase text-[#6B6B73] border-b border-[#EFF0F2]">

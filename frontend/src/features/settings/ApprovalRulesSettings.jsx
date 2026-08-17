@@ -8,6 +8,7 @@ import {
   AlertCircle, CheckCircle2, Edit2, Loader2, Plus, Settings, Trash2, X
 } from "lucide-react";
 import ApprovalRuleForm from "./ApprovalRuleForm";
+import FormModal from "../../components/FormModal";
 import { fmtNum, ENTITY_TYPES, OPERATORS, ROLES } from "./approvalRulesConstants";
 
 export default function ApprovalRulesSettings({ currentUser }) {
@@ -192,16 +193,26 @@ export default function ApprovalRulesSettings({ currentUser }) {
         )}
       </div>
 
-      {/* Create/Edit Form */}
-      {showCreateForm && (
+      {/* FASE P4 — aturan persetujuan dibuat/diubah lewat POP-UP (dulu formnya
+          menyelip di atas daftar aturan sehingga daftarnya terdorong ke bawah). */}
+      <FormModal
+        open={showCreateForm}
+        onClose={resetForm}
+        title={editingRule ? "Ubah Aturan Persetujuan" : "Aturan Persetujuan Baru"}
+        subtitle="Ambang nilai dokumen & peran yang berwenang memutuskan"
+        icon={Settings}
+        size="lg"
+        testId="rule-form-modal"
+      >
         <ApprovalRuleForm
+          variant="modal"
           formData={formData}
           setFormData={setFormData}
           onSubmit={handleSubmit}
           onCancel={resetForm}
           editingRule={editingRule}
         />
-      )}
+      </FormModal>
 
       {/* Rules List */}
       {loading ? (

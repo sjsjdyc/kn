@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import axios, { API } from "../../services/apiClient";
-import { Network, Plus, Pencil, Power, X, Building2, Briefcase, Users } from "lucide-react";
+import { Network, Plus, Pencil, Power, Building2, Briefcase, Users } from "lucide-react";
 import KNSelect from "../../components/KNSelect";
 import EntityBadge from "../../components/EntityBadge";
+import FormModal from "../../components/FormModal";
 import ErrorNotice from "../../components/ErrorNotice";
 import ConfirmModal from "../../components/ConfirmModal";
 
@@ -117,13 +118,23 @@ export default function OrgUnitsView({ currentUser, selectedEntity }) {
         </div>
       </div>
 
-      {showForm && canManage && (
-        <div className="section-card mb-3" data-testid="org-form">
-          <div className="section-head">
-            <h2 className="text-[13px] font-bold">{editId ? "Edit Unit" : form.unit_type === "department" ? "Tambah Departemen" : "Tambah Jabatan"}</h2>
-            <button className="icon-button" onClick={() => { setShowForm(false); setEditId(null); }}><X size={14} /></button>
-          </div>
-          <div className="section-body grid grid-cols-2 gap-3">
+      {/* FASE P4 — form unit organisasi menjadi POP-UP (dulu menyelip di atas pohon
+          struktur sehingga hierarkinya terdorong ke bawah). Logika form tidak diubah. */}
+      <FormModal
+        open={showForm && canManage}
+        onClose={() => { setShowForm(false); setEditId(null); }}
+        title={editId ? "Ubah Unit Organisasi" : form.unit_type === "department" ? "Tambah Departemen" : "Tambah Jabatan"}
+        subtitle="Perusahaan (Entitas) › Departemen › Jabatan"
+        icon={Network}
+        size="md"
+        testId="org-form"
+        onSubmit={submit}
+        submitLabel={editId ? "Simpan Perubahan" : "Simpan"}
+        submitTestId="submit-org-button"
+        cancelTestId="cancel-org-button"
+        error={error}
+      >
+        <div className="grid grid-cols-2 gap-3">
             <Field label="Nama Unit" req>
               <input data-testid="org-name-input" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="field" placeholder={form.unit_type === "department" ? "Penjualan" : "Sales Executive"} />
             </Field>
@@ -141,13 +152,8 @@ export default function OrgUnitsView({ currentUser, selectedEntity }) {
                 <input data-testid="org-desc-input" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="field" placeholder="Deskripsi singkat" />
               </Field>
             </div>
-            <div className="col-span-2 flex gap-2">
-              <button data-testid="submit-org-button" onClick={submit} className="primary-button flex-1 justify-center">{editId ? "Simpan Perubahan" : "Simpan"}</button>
-              <button data-testid="cancel-org-button" onClick={() => { setShowForm(false); setEditId(null); }} className="secondary-button">Batal</button>
-            </div>
-          </div>
         </div>
-      )}
+      </FormModal>
 
       <div className="section-card">
         <div className="section-body">

@@ -6,10 +6,15 @@ import KNSelect from "../../../components/KNSelect";
 export default function TransferCreateForm({
   formData, setFormData, newItem, setNewItem,
   products = [], warehouses = [], onAddItem, onRemoveItem, onSubmit, onClose,
+  variant = "card",
 }) {
+  // FASE P4 — `variant="modal"`: kartu & judul sendiri dilepas (FormModal yang
+  // menyediakannya) supaya tidak ada kartu di dalam kartu dan dua judul bertumpuk.
+  const isModal = variant === "modal";
   return (
-    <div data-testid="create-transfer-form" className="bg-white border border-[#E5E5EA] rounded-2xl p-6 shadow-sm">
-      <h3 className="text-md font-semibold mb-4">Buat Transfer Baru</h3>
+    <div data-testid="create-transfer-form"
+      className={isModal ? "" : "bg-white border border-[#E5E5EA] rounded-2xl p-6 shadow-sm"}>
+      {!isModal && <h3 className="text-md font-semibold mb-4">Buat Transfer Baru</h3>}
 
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
@@ -123,22 +128,26 @@ export default function TransferCreateForm({
         />
       </div>
 
-      <div className="flex gap-2">
-        <button
-          data-testid="submit-transfer-button"
-          onClick={onSubmit}
-          className="flex-1 bg-[#007AFF] hover:bg-[#0056B3] text-white rounded-full px-6 py-2.5 font-medium"
-        >
-          Buat Transfer
-        </button>
-        <button
-          data-testid="cancel-form-button"
-          onClick={onClose}
-          className="flex-1 bg-white border border-[#E5E5EA] hover:border-[#007AFF] text-[#3C3C43] rounded-full px-6 py-2.5 font-medium"
-        >
-          Batal
-        </button>
-      </div>
+      {/* Tombol aksi hanya dipakai pada mode halaman; di pop-up, FormModal yang
+          menyediakan tombol Simpan/Batal yang menempel di bawah. */}
+      {!isModal && (
+        <div className="flex gap-2">
+          <button
+            data-testid="submit-transfer-button"
+            onClick={onSubmit}
+            className="flex-1 bg-[#007AFF] hover:bg-[#0056B3] text-white rounded-full px-6 py-2.5 font-medium"
+          >
+            Buat Transfer
+          </button>
+          <button
+            data-testid="cancel-form-button"
+            onClick={onClose}
+            className="flex-1 bg-white border border-[#E5E5EA] hover:border-[#007AFF] text-[#3C3C43] rounded-full px-6 py-2.5 font-medium"
+          >
+            Batal
+          </button>
+        </div>
+      )}
     </div>
   );
 }

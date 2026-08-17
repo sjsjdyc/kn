@@ -1352,3 +1352,40 @@ di `hooks/useAppActions.js`. Terukur: konsol manajer **4 → 0** error/403.
    verifikasi administratif SO belum punya baris antrean sendiri.
 2. **Kirim dokumen via email/SMTP** (butuh kredensial pemilik) — satu-satunya backlog EPIC 7 grounded.
 3. **Ambang persetujuan antar-PT (US22) diuji dari ujung ke ujung lewat layar.**
+
+---
+
+## §STATUS P4 — SESI 2026-08-17 (lanjutan): **TOMBOL "BUAT" JADI POP-UP YANG KONSISTEN**
+
+> Permintaan pemilik: *"P4 — form Buat jadi modal (~15 layar masih form inline) lanjutkan ini"*.
+> Bukti penutup: `gate.sh --full` **71 gate HIJAU / 0 FAIL` · agen uji frontend **10/10 user story,
+> nol isu** · konsol browser **0 error**. Rincian teknis di `PERF_UX_AUDIT.md §P4`.
+
+### P4.0 Angka "±15 layar" diperiksa dulu — ternyata **10**
+Dokumen audit menyebut ~15 view inline. Alat ukur baru (`scripts/audit_create_modal.py`)
+menghitung dari KODE: **inline 12 tombol di 10 layar** (sisanya sudah dikonversi sesi-sesi lalu),
+**36 sudah pop-up**, **7 pindah halaman** (alur kompleks, keputusan pemilik), **0 tombol mati**.
+Melapor "15" tanpa mengukur = memperbaiki hal yang sudah beres.
+
+### P4.1 Satu standar: `components/FormModal.jsx`
+Kepala menempel · badan scroll · kaki menempel · **Esc menutup** · scroll latar dikunci · fokus
+otomatis ke isian pertama · **galat di dalam modal** · backdrop `overlayDismiss()` (INV-UI-01) ·
+**tidak membungkus ulang** komponen yang sudah punya `<form>` sendiri (anti form-di-dalam-form).
+
+### P4.2 Sepuluh layar dikonversi (logika form tidak diubah)
+Supplier · Daftar Harga Supplier · Kebijakan Retur · Unit Organisasi (HRD) · Kas · Retur Beli ·
+**Retur Jual** (dulu MENUKAR seluruh halaman sehingga daftar & ringkasan hilang) · Aturan
+Persetujuan · Transfer Gudang · Master Data (AdminView, tombolnya dulu ikut hilang saat form buka).
+Hasil terukur: **inline 12 → 0**.
+
+### P4.3 Gate baru `INV-UI-05` — supaya tidak balik lagi
+`scripts/audit_create_modal.py` (+`--self-test` 7 kasus bukti-merah) terdaftar di `gate.sh`:
+create **inline baru**, **pindah halaman tanpa keputusan tercatat**, atau **tombol mati**
+(state dinyalakan tapi tak pernah dirender) = **MERAH**; tiap pengecualian wajib ber-ALASAN.
+Penjaganya sendiri sempat **menuduh palsu** dua kali saat dibuat (7 layar benar terbaca "inline";
+`setForm({…})` dianggap membuka pintu) → detektornya diperbaiki lebih dulu sebelum dipakai menilai.
+
+### P4.4 Sisa PERF/UX sesudah ini
+**P5 (belum)**: `ux_audit` **22 ERROR / 37 WARN di 17 berkas** (loading/empty/chart baseline) +
+`window.alert/confirm` **21×** → ganti `notice bar`/`ConfirmModal`.
+**Sisa P2 (belum)**: paginasi Retur Jual · Retur Beli · Pesanan (OrdersView) · Jurnal GL.

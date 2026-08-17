@@ -4,17 +4,23 @@ import { CheckCircle2, X } from "lucide-react";
 import KNSelect from "../../components/KNSelect";
 import { ENTITY_TYPES, OPERATORS, ROLES } from "./approvalRulesConstants";
 
-export default function ApprovalRuleForm({ formData, setFormData, onSubmit, onCancel, editingRule }) {
+export default function ApprovalRuleForm({ formData, setFormData, onSubmit, onCancel,
+                                          editingRule, variant = "card" }) {
+  // FASE P4 — `variant="modal"`: kartu & judul sendiri dilepas karena FormModal sudah
+  // menyediakan kepala + tombol tutup (kalau tidak, muncul dua judul & dua tombol X).
+  const isModal = variant === "modal";
   return (
-    <div className="form-card" data-testid="rule-form">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold">
-          {editingRule ? "Edit Rule" : "Buat Rule Baru"}
-        </h3>
-        <button className="icon-button" onClick={onCancel}>
-          <X size={14} />
-        </button>
-      </div>
+    <div className={isModal ? "" : "form-card"} data-testid="rule-form">
+      {!isModal && (
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">
+            {editingRule ? "Ubah Aturan" : "Buat Aturan Baru"}
+          </h3>
+          <button className="icon-button" onClick={onCancel}>
+            <X size={14} />
+          </button>
+        </div>
+      )}
 
       <form onSubmit={onSubmit}>
         <div className="form-row-2col">

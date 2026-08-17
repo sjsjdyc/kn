@@ -1,12 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import {
-  RefreshCw, Settings, Plus, XCircle, Save, ShieldCheck, UserCog,
-  Check, AlertTriangle, ChevronUp, ChevronDown,
-} from "lucide-react";
+import { RefreshCw, Settings, Plus, Save, ShieldCheck, UserCog, Check, AlertTriangle, ChevronUp, ChevronDown } from "lucide-react";
 import CategoryManager from "./CategoryManager";
 import IntegrationsPanel from "./IntegrationsPanel";
 import PermissionMatrixRecords from "./PermissionMatrixRecords";
 import KNSelect from "../../components/KNSelect";
+import FormModal from "../../components/FormModal";
 import ProductMasterForm from "./products/ProductMasterForm";
 import ProductLifecycleCell from "../rnd/ProductLifecycleCell";
 import axios, { API } from "../../services/apiClient";
@@ -219,28 +217,26 @@ export default function AdminView({
       {tab === "integrations" && <IntegrationsPanel />}
       {tab !== "categories" && tab !== "integrations" && (
       <section className="grid gap-3 lg:grid-cols-[360px_1fr]">
-        {!showCreateForm && (
-          <button
-            data-testid="toggle-admin-create-form-button"
-            className="secondary-button"
-            onClick={() => setShowCreateForm(true)}
-          >
-            <Plus size={14} /> Tampilkan Formulir Buat
-          </button>
-        )}
-        {showCreateForm && (
-        <div className="section-card">
-          <div className="section-head">
-            <h2>Buat</h2>
-            <button
-              data-testid="hide-admin-create-form-button"
-              className="icon-button ml-auto"
-              onClick={() => setShowCreateForm(false)}
-            >
-              <XCircle size={14} />
-            </button>
-          </div>
-          <div className="section-body">
+        {/* FASE P4 — form master data menjadi POP-UP. Dua perbaikan sekaligus:
+            (1) tombolnya SELALU terlihat (dulu ia menghilang begitu form terbuka, jadi
+            pengguna tak punya penanda apa pun bahwa "form"-nya adalah kolom di sebelah),
+            (2) daftar Records tidak lagi terhimpit kolom 360px saat mengisi. */}
+        <button
+          data-testid="toggle-admin-create-form-button"
+          className="secondary-button"
+          onClick={() => setShowCreateForm(true)}
+        >
+          <Plus size={14} /> Tampilkan Formulir Buat
+        </button>
+        <FormModal
+          open={showCreateForm}
+          onClose={() => setShowCreateForm(false)}
+          title="Buat Data Master"
+          subtitle="Isian untuk tab yang sedang dibuka — termasuk impor/ekspor CSV"
+          icon={Plus}
+          size="md"
+          testId="admin-create-form"
+        >
           {!["permissions", "audit"].includes(tab) && <div data-testid="admin-import-export-panel" className="mb-3 grid gap-2 rounded-md border border-[#EFF0F2] bg-[#FAFBFC] p-2.5">
             <p className="text-[11px] font-bold uppercase tracking-wide text-[#6B6B73]">Impor / Ekspor {currentResource}</p>
             <input data-testid="admin-import-file-input" className="field" type="file" accept=".csv,.xlsx" onChange={(e) => setImportFile(e.target.files?.[0] || null)} />
@@ -313,9 +309,7 @@ export default function AdminView({
             </div>
             <button data-testid="refresh-audit-button" className="primary-button" onClick={onRefreshAudit}><RefreshCw size={14} /> Refresh Audit</button>
           </div>}
-          </div>
-        </div>
-        )}
+        </FormModal>
         <div className="section-card">
           <div className="section-head"><h2>Records</h2></div>
           <div className="section-body">

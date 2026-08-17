@@ -7,6 +7,7 @@ import GroupEntityBadge, { isGroupEntityPartner } from "../../components/GroupEn
 import Supplier360Panel from "./Supplier360Panel";
 import ErrorNotice from "../../components/ErrorNotice";
 import ConfirmModal from "../../components/ConfirmModal";
+import FormModal from "../../components/FormModal";
 import PaginationBar from "../../components/PaginationBar";
 import { ReturnPolicyEditor } from "../../components/ReturnPolicyEditor";
 import { usePagedList } from "../../hooks/usePagedList";
@@ -166,14 +167,25 @@ export default function SuppliersView({ currentUser, selectedEntity }) {
         </div>
       </div>
 
-      {/* Create/Edit form */}
-      {showForm && canManage && (
-        <div data-testid="supplier-form" className="section-card mb-3">
-          <div className="section-head">
-            <h2 className="text-[13px] font-bold">{editId ? "Edit Supplier" : "Buat Supplier Baru"}</h2>
-            <button className="icon-button" onClick={() => { setShowForm(false); setEditId(null); }}><X size={14} /></button>
-          </div>
-          <div className="section-body space-y-3">
+      {/* FASE P4 — form Buat/Ubah menjadi POP-UP.
+          Sebelumnya form ini menyelip di antara kartu ringkasan dan tabel: daftar supplier
+          terdorong ke bawah lipatan sehingga pengguna sering tak sadar formnya sudah terbuka
+          (lalu menyimpulkan tombolnya tidak berfungsi). Logika form tidak diubah. */}
+      <FormModal
+        open={showForm && canManage}
+        onClose={() => { setShowForm(false); setEditId(null); }}
+        title={editId ? "Ubah Supplier" : "Supplier Baru"}
+        subtitle="Data pemasok, termin pembayaran & kebijakan retur"
+        icon={Truck}
+        size="lg"
+        testId="supplier-form"
+        onSubmit={handleSubmit}
+        submitLabel={editId ? "Simpan Perubahan" : "Buat Supplier"}
+        submitTestId="submit-supplier-button"
+        cancelTestId="cancel-supplier-button"
+        error={error}
+      >
+        <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <Field label="Nama Supplier" req>
                 <input data-testid="supplier-name-input" value={form.name}
@@ -244,15 +256,8 @@ export default function SuppliersView({ currentUser, selectedEntity }) {
               <textarea data-testid="supplier-notes-input" value={form.notes}
                 onChange={(e) => setForm({ ...form, notes: e.target.value })} className="field" rows="2" placeholder="Catatan tambahan..." />
             </Field>
-            <div className="flex gap-2">
-              <button data-testid="submit-supplier-button" onClick={handleSubmit} className="flex-1 primary-button justify-center">
-                {editId ? "Simpan Perubahan" : "Buat Supplier"}
-              </button>
-              <button data-testid="cancel-supplier-button" onClick={() => { setShowForm(false); setEditId(null); }} className="secondary-button">Batal</button>
-            </div>
-          </div>
         </div>
-      )}
+      </FormModal>
 
       {/* Table */}
       <div className="section-card">

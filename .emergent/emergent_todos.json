@@ -1,38 +1,38 @@
 [
   {
-    "content": "Fase 1: Tutup gate merah INV-GATE-01 di akarnya + bukti (POC 26/26)",
+    "content": "P4: Ukur dulu — alat baru scripts/audit_create_modal.py (INV-UI-05) + self-test 7 kasus",
     "status": "completed"
   },
   {
-    "content": "Fase 2 (F-6): Investigasi bukti → keputusan CABUT mesin persetujuan generik",
+    "content": "P4: Perbaiki detektor yang menuduh palsu (7 layar sudah modal, setForm bukan pembuka pintu)",
     "status": "completed"
   },
   {
-    "content": "Fase 2 (F-6): Backend — cabut mesin generik + daftarkan 14 antrean nyata (KPI 17→22)",
+    "content": "P4: Komponen standar components/FormModal.jsx (Esc, scroll lock, autofocus, galat di dalam, overlayDismiss)",
     "status": "completed"
   },
   {
-    "content": "Fase 2 (F-6): Gate baru INV-APPR-01 (self-test 15/15) + perbaikan invarian koleksi",
+    "content": "P4: Konversi 10 layar dari form inline/tukar-halaman → pop-up (inline 12→0, tombol mati 0)",
     "status": "completed"
   },
   {
-    "content": "Fase 2 (F-6): POC F-6 bukti-merah 43/43 + registrasi di gate.sh",
+    "content": "P4: Perbaiki label 'Tutup Form' + AdminView tombol selalu terlihat",
     "status": "completed"
   },
   {
-    "content": "Fase 2 (F-6): Frontend — panel antrean lain + perbaikan 4×403 senyap manager (kini 0)",
+    "content": "P4: Registrasi gate INV-UI-05 di gate.sh + gate penuh HIJAU (71 PASS / 0 FAIL, mode full)",
     "status": "completed"
   },
   {
-    "content": "Fase 2 (F-6): gate.sh --full HIJAU 69 PASS / 0 FAIL (receipt final)",
+    "content": "P4: Verifikasi visual 5 modal (Esc/backdrop/X, dropdown tak menutup modal) + konsol 0 error",
     "status": "completed"
   },
   {
-    "content": "Fase 2 (F-6): E2E testing_agent_v3 — BE 47/47, FE 21/22 (timeout skrip; diverifikasi tangan admin+manajer)",
+    "content": "P4: E2E testing_agent_v3 — 10/10 user story lulus, 0 isu; residu data uji dibersihkan",
     "status": "completed"
   },
   {
-    "content": "Dokumentasi: plan.md §STATUS F-6, SESSION_HANDOFF.md, ENTITY_REGISTRY.md (pensiun + aturan tetap hidup)",
+    "content": "P4: Dokumentasi — PERF_UX_AUDIT.md §P4 SELESAI, plan.md §STATUS P4, SESSION_HANDOFF.md",
     "status": "completed"
   }
 ]

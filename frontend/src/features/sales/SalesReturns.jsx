@@ -15,6 +15,7 @@ import { CheckCircle2, Loader2, Plus, RotateCcw, Search, X, AlertCircle } from "
 import { ReturnStatusPill, ReturnTypeBadge, fmtDate } from "./ReturnShared";
 import ReturnDetail from "./ReturnDetail";
 import CreateReturnForm from "./CreateReturnForm";
+import FormModal from "../../components/FormModal";
 
 
 // ─── Main component ─────────────────────────────────────────────────────────
@@ -152,23 +153,6 @@ export default function SalesReturns({ currentUser, onNavigate }) {
     }
   }
 
-  if (showCreate) {
-    return (
-      <CreateReturnForm
-        orders={orders}
-        token={token}
-        onCreated={(doc) => {
-          setShowCreate(false);
-          setNotice(`${doc.number} berhasil dibuat.`);
-          load();
-          setSelected(doc);
-        }}
-        onCancel={() => setShowCreate(false)}
-        onLoadOrders={loadOrders}
-      />
-    );
-  }
-
   if (selected) {
     return (
       <ReturnDetail
@@ -194,6 +178,32 @@ export default function SalesReturns({ currentUser, onNavigate }) {
 
   return (
     <div data-testid="sales-returns-view" className="view-container">
+      {/* FASE P4 — form retur jual menjadi POP-UP. Sebelumnya tombol "Buat Return"
+          MENUKAR seluruh halaman (daftar retur & ringkasan hilang), jadi pengguna
+          kehilangan konteks dan harus menekan "kembali" untuk melihat datanya lagi. */}
+      <FormModal
+        open={showCreate}
+        onClose={() => setShowCreate(false)}
+        title="Buat Retur / Barang Sisa"
+        subtitle="Retur, BS, penggantian, komplain & garansi dari pesanan yang sudah dikirim"
+        icon={RotateCcw}
+        size="lg"
+        testId="sales-return-form"
+      >
+        <CreateReturnForm
+          variant="modal"
+          orders={orders}
+          token={token}
+          onCreated={(doc) => {
+            setShowCreate(false);
+            setNotice(`${doc.number} berhasil dibuat.`);
+            load();
+            setSelected(doc);
+          }}
+          onCancel={() => setShowCreate(false)}
+          onLoadOrders={loadOrders}
+        />
+      </FormModal>
       {/* Header */}
       <div className="view-header">
         <div>

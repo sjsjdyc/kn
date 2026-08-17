@@ -4,6 +4,7 @@ import { RotateCcw, Plus, X, CheckCircle, XCircle, Send, FileText, Layers, Trash
 import { formatCurrency, formatQty } from "../../utils/formatters";
 import KNSelect from "../../components/KNSelect";
 import ErrorNotice from "../../components/ErrorNotice";
+import FormModal from "../../components/FormModal";
 import ConfirmModal from "../../components/ConfirmModal";
 import ReturnDetailPanel from "./ReturnDetailPanel";
 import RollPickerModal from "./RollPickerModal";
@@ -241,7 +242,7 @@ export default function PurchaseReturns({ currentUser, selectedEntity }) {
             <h2 data-testid="purchase-returns-title">Retur Beli (Nota Debit)</h2>
           </div>
           <button data-testid="create-return-button" onClick={() => setShowForm(!showForm)} className="primary-button">
-            <Plus size={13} /> {showForm ? "Tutup Form" : "Buat Retur"}
+            <Plus size={13} /> Buat Retur
           </button>
         </div>
         <div className="section-body">
@@ -269,10 +270,22 @@ export default function PurchaseReturns({ currentUser, selectedEntity }) {
       </div>
 
       {/* Create form */}
-      {showForm && (
-        <div data-testid="return-form" className="section-card mb-3">
-          <div className="section-head"><h2 className="text-[13px] font-bold">Buat Retur Beli</h2></div>
-          <div className="section-body space-y-3">
+      {/* FASE P4 — form retur beli menjadi POP-UP (dulu menyelip di atas daftar retur;
+          pada layar 13" tabelnya terdorong keluar layar). Logika form tidak diubah. */}
+      <FormModal
+        open={showForm}
+        onClose={() => setShowForm(false)}
+        title="Buat Retur Beli"
+        subtitle="Pilih PO & roll yang dikembalikan ke supplier"
+        icon={RotateCcw}
+        size="lg"
+        testId="purchase-return-form"
+        onSubmit={handleSubmit}
+        submitLabel="Buat Retur"
+        submitTestId="submit-return-button"
+        error={error}
+      >
+        <div className="space-y-3">
             <div className="grid grid-cols-3 gap-3">
               <Field label="Supplier" req>
                 <KNSelect data-testid="return-supplier-select" value={form.supplier_id} onValueChange={(v) => setForm({ ...form, supplier_id: v, po_id: "" })} className="field" placeholder="Pilih Supplier"
@@ -357,13 +370,8 @@ export default function PurchaseReturns({ currentUser, selectedEntity }) {
               <input data-testid="return-submit-now" type="checkbox" checked={form.submit_now} onChange={(e) => setForm({ ...form, submit_now: e.target.checked })} />
               Langsung ajukan persetujuan (jika tidak dicentang, disimpan sebagai draf)
             </label>
-            <div className="flex gap-2">
-              <button data-testid="submit-return-button" onClick={handleSubmit} className="flex-1 primary-button justify-center">Buat Retur</button>
-              <button onClick={() => setShowForm(false)} className="secondary-button">Batal</button>
-            </div>
-          </div>
         </div>
-      )}
+      </FormModal>
 
       {/* List */}
       <div className="section-card">

@@ -4,6 +4,7 @@ import { Wallet, Plus, ArrowDownCircle, ArrowUpCircle, Ban, X, Building2 } from 
 import { formatCurrency } from "../../utils/formatters";
 import KNSelect from "../../components/KNSelect";
 import ErrorNotice from "../../components/ErrorNotice";
+import FormModal from "../../components/FormModal";
 import ConfirmModal from "../../components/ConfirmModal";
 
 /**
@@ -156,7 +157,7 @@ export default function CashManagementView({ currentUser, selectedEntity }) {
           </div>
           {canManage && (
             <button data-testid="create-cash-button" onClick={() => { setShowForm(!showForm); setForm({ ...EMPTY_FORM, entity_id: (selectedEntity && selectedEntity !== "all") ? selectedEntity : "" }); }} className="primary-button">
-              <Plus size={13} /> {showForm ? "Tutup Form" : "Catat Transaksi"}
+              <Plus size={13} /> Catat Transaksi
             </button>
           )}
         </div>
@@ -170,10 +171,23 @@ export default function CashManagementView({ currentUser, selectedEntity }) {
       </div>
 
       {/* Create form */}
-      {showForm && canManage && (
-        <div data-testid="cash-form" className="section-card mb-3">
-          <div className="section-head"><h2 className="text-[13px] font-bold">Catat Transaksi Kas</h2></div>
-          <div className="section-body space-y-3">
+      {/* FASE P4 — pencatatan kas menjadi POP-UP (dulu menyelip di antara ringkasan
+          saldo dan daftar transaksi). Logika form tidak diubah. */}
+      <FormModal
+        open={showForm && canManage}
+        onClose={() => setShowForm(false)}
+        title="Catat Transaksi Kas"
+        subtitle="Kas kecil (tunai) atau kas besar/bank — masuk & keluar"
+        icon={Wallet}
+        size="md"
+        testId="cash-form"
+        onSubmit={handleSubmit}
+        submitLabel="Catat Transaksi"
+        submitTestId="submit-cash-button"
+        cancelTestId="cancel-cash-button"
+        error={error}
+      >
+        <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <Field label="Jenis Kas">
                 <KNSelect data-testid="cash-type-select" value={form.cash_type} onValueChange={(v) => setForm({ ...form, cash_type: v })} className="field"
@@ -199,13 +213,8 @@ export default function CashManagementView({ currentUser, selectedEntity }) {
             <Field label="Deskripsi">
               <input data-testid="cash-description-input" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="field" placeholder="Keterangan transaksi..." />
             </Field>
-            <div className="flex gap-2">
-              <button data-testid="submit-cash-button" onClick={handleSubmit} className="flex-1 primary-button justify-center">Catat Transaksi</button>
-              <button data-testid="cancel-cash-button" onClick={() => setShowForm(false)} className="secondary-button">Batal</button>
-            </div>
-          </div>
         </div>
-      )}
+      </FormModal>
 
       {/* Transactions table */}
       <div className="section-card">

@@ -83,11 +83,33 @@ mendarat di dokumen yang benar) · konsol browser **0 error/403**.
   `db.login_attempts.delete_many({})` → seed ulang → cek `grep -i warn`.
 
 ### 8. Berikutnya (menunggu keputusan pemilik) — rinci di `plan.md` §STATUS F-6.7
-1. **Utang alur yang kini TERCATAT** di pembebasan penjaga: payroll & desain diputuskan dari `draft`
-   (butuh langkah "ajukan") · keputusan selisih pembayaran tanpa status dokumen · verifikasi
-   administratif SO belum punya baris antrean sendiri.
-2. **Kirim dokumen via email/SMTP** (butuh kredensial pemilik).
-3. **Ambang persetujuan antar-PT (US22)** diuji ujung-ke-ujung lewat layar.
+
+### 9. LANJUTAN SESI YANG SAMA — **FASE P4: tombol "Buat" jadi pop-up konsisten** (SELESAI)
+Permintaan pemilik setelah laporan status: *"P4 — form Buat jadi modal, lanjutkan ini"*.
+- Angka "±15 layar inline" **diukur ulang dari kode** → nyatanya **10 layar (12 tombol)**; 36 sudah
+  pop-up; 7 sengaja tetap halaman (alur kompleks). Alat ukurnya: `scripts/audit_create_modal.py`.
+- Standar baru **`components/FormModal.jsx`** (kepala/kaki menempel · Esc · scroll latar dikunci ·
+  fokus isian pertama · galat di dalam modal · backdrop `overlayDismiss()` → INV-UI-01 tetap hijau ·
+  tak membungkus ulang komponen ber-`<form>` sendiri).
+- **10 layar dikonversi**: Supplier · Daftar Harga Supplier · Kebijakan Retur · Unit Organisasi ·
+  Kas · Retur Beli · **Retur Jual** (dulu menukar seluruh halaman) · Aturan Persetujuan ·
+  Transfer Gudang · Master Data (AdminView). Hasil: **inline 12 → 0 · tombol mati 0**.
+- **Gate baru `INV-UI-05`** + `--self-test` 7 kasus: inline baru / pindah halaman tanpa keputusan
+  tercatat / tombol mati = MERAH; pengecualian wajib beralasan. Penjaganya sempat **menuduh palsu**
+  (7 layar benar terbaca "inline"; `setForm({…})` dianggap membuka pintu) → diperbaiki dulu.
+- Bukti: `gate.sh --full` **71 gate HIJAU / 0 FAIL** · agen uji frontend **10/10 user story, nol
+  isu** (termasuk: tabel tetap terlihat di belakang modal · galat validasi di dalam modal ·
+  Esc/backdrop/X menutup · **memilih dropdown TIDAK menutup modal**) · konsol **0 error** ·
+  `ux_audit` tidak bertambah buruk (22 ERROR/17 berkas = backlog P5).
+
+### 10. Sisa yang BELUM (untuk sesi berikutnya)
+1. **P5 UI/UX**: `ux_audit` 22 ERROR/37 WARN (loading/empty/chart) + `window.alert/confirm` **21×**.
+2. **Sisa P2 paginasi**: Retur Jual · Retur Beli · Pesanan (OrdersView) · Jurnal GL.
+3. **Utang alur F-6.7**: payroll & desain diputuskan dari `draft` (butuh langkah "Ajukan") ·
+   keputusan selisih pembayaran tanpa status dokumen · verifikasi administratif SO tanpa antrean.
+4. **Kirim dokumen via email/SMTP** (butuh kredensial pemilik).
+5. **Ambang persetujuan antar-PT (US22)** diuji ujung-ke-ujung lewat layar.
+6. 3 layar masih "Segera Hadir": BOM Printing (`cs-bom`) · BI Sales · BI Stok.
 
 ---
 

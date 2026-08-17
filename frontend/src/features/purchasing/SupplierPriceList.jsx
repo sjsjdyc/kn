@@ -4,6 +4,7 @@ import { Plus, Pencil, Power, Tag, X, RefreshCw, AlertTriangle } from "lucide-re
 import KNSelect from "../../components/KNSelect";
 import ErrorNotice from "../../components/ErrorNotice";
 import ConfirmModal from "../../components/ConfirmModal";
+import FormModal from "../../components/FormModal";
 import { formatCurrency, formatQty } from "../../utils/formatters";
 
 /**
@@ -144,13 +145,22 @@ export default function SupplierPriceList({ supplierId, canManage }) {
         )}
       </div>
 
-      {showForm && canManage && (
-        <div data-testid="price-entry-form" className="section-card mb-3">
-          <div className="section-head">
-            <h2 className="text-[12.5px] font-bold">{editId ? "Edit Harga" : "Tambah Harga Beli"}</h2>
-            <button className="icon-button" onClick={() => { setShowForm(false); setEditId(null); }}><X size={14} /></button>
-          </div>
-          <div className="section-body grid grid-cols-2 gap-3">
+      {/* FASE P4 — form harga beli menjadi POP-UP (dulu menyelip di atas tabel harga). */}
+      <FormModal
+        open={showForm && canManage}
+        onClose={() => { setShowForm(false); setEditId(null); }}
+        title={editId ? "Ubah Harga Beli" : "Tambah Harga Beli"}
+        subtitle="Harga per unit, MOQ, lead time, dan masa berlaku"
+        icon={Tag}
+        size="md"
+        testId="price-entry-form"
+        onSubmit={handleSubmit}
+        submitLabel={editId ? "Simpan" : "Tambah"}
+        submitTestId="submit-price-entry-button"
+        cancelTestId="cancel-price-entry-button"
+        error={error}
+      >
+          <div className="grid grid-cols-2 gap-3">
             <div className="col-span-2">
               <label className="block text-[10.5px] font-semibold text-[#6B6B73] mb-1">Produk <span className="req">*</span></label>
               <KNSelect data-testid="price-product-select" value={form.product_id} onValueChange={onSelectProduct}
@@ -186,15 +196,8 @@ export default function SupplierPriceList({ supplierId, canManage }) {
               <input data-testid="price-validuntil-input" type="date" value={form.valid_until}
                 onChange={(e) => setForm({ ...form, valid_until: e.target.value })} className="field" />
             </div>
-            <div className="col-span-2 flex gap-2 pt-1">
-              <button data-testid="submit-price-entry-button" onClick={handleSubmit} className="flex-1 primary-button justify-center">
-                {editId ? "Simpan" : "Tambah"}
-              </button>
-              <button data-testid="cancel-price-entry-button" onClick={() => { setShowForm(false); setEditId(null); }} className="secondary-button">Batal</button>
-            </div>
           </div>
-        </div>
-      )}
+      </FormModal>
 
       <div className="section-card">
         <div className="overflow-hidden">

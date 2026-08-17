@@ -4,6 +4,7 @@ import axios, { API } from "../../services/apiClient";
 import ErrorNotice from "../../components/ErrorNotice";
 import { StatusBadge } from "./transfer/transferConstants";
 import TransferCreateForm from "./transfer/TransferCreateForm";
+import FormModal from "../../components/FormModal";
 import TransferDetailModal from "./transfer/TransferDetailModal";
 
 /**
@@ -193,8 +194,23 @@ export default function TransferManagement({ user }) {
       </div>
 
       {/* Create Form */}
-      {showCreateForm && (
+      {/* FASE P4 — form transfer menjadi POP-UP: daftar transfer di belakang tetap
+          terlihat, jadi pengguna bisa membandingkan sambil mengisi. */}
+      <FormModal
+        open={showCreateForm}
+        onClose={() => { setShowCreateForm(false); resetForm(); }}
+        title="Transfer Gudang Baru"
+        subtitle="Pilih gudang asal & tujuan, lalu tambahkan barang yang dipindah"
+        icon={ArrowRight}
+        size="lg"
+        testId="transfer-form"
+        onSubmit={handleCreateTransfer}
+        submitLabel="Buat Transfer"
+        submitTestId="submit-transfer-button"
+        cancelTestId="cancel-form-button"
+      >
         <TransferCreateForm
+          variant="modal"
           formData={formData}
           setFormData={setFormData}
           newItem={newItem}
@@ -206,7 +222,7 @@ export default function TransferManagement({ user }) {
           onSubmit={handleCreateTransfer}
           onClose={() => { setShowCreateForm(false); resetForm(); }}
         />
-      )}
+      </FormModal>
 
       {/* Transfers List */}
       <ErrorNotice message={error} onRetry={fetchTransfers} onDismiss={() => setError("")} testId="transfer-error" />

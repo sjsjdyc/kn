@@ -143,6 +143,13 @@ STATIK=(
   "validate_compliance (file/naming/docs/api/env)|python scripts/validate_compliance.py"
   "check_nav_map (navigasi vs SSOT)|python scripts/check_nav_map.py"
   "guard:modal_dismiss (INV-UI-01, modal auto-close)|python scripts/guardrails/verify_modal_dismiss.py"
+  # FASE P4 — konsistensi tombol "Buat": WAJIB pop-up, bukan form yang menyelip di tengah
+  # halaman (form inline mendorong daftar data ke bawah lipatan sehingga pengguna sering
+  # tak sadar formnya terbuka lalu menyimpulkan "tombolnya tidak berfungsi"). Penjaga ini
+  # juga menangkap TOMBOL MATI (state dinyalakan tetapi tak pernah dirender) dan menuntut
+  # setiap pengecualian (inline / pindah halaman) punya ALASAN tertulis.
+  "guard:create_modal SELF-TEST (bukti-merah penjaga create pop-up)|python scripts/audit_create_modal.py --self-test"
+  "guard:create_modal (INV-UI-05, tombol Buat = pop-up konsisten)|python scripts/audit_create_modal.py"
   # FASE G-0 — satu sumber kebenaran konfigurasi. `--strict` memerah bila ada setting
   # tersembunyi/tombol palsu/mati ATAU ada layar lain yang menulis konfigurasi.
   "config_wiring (INV-CFG-01/04, satu sumber kebenaran)|python scripts/audit_config_wiring.py --strict"
